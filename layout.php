@@ -37,8 +37,6 @@ $PAGE->set_url('/local/dsubscription/layout.php', array('id'=>$id));
 
 require_login($course, false, $cm); // needed to setup proper $COURSE
 
-$changeuserurl = $CFG->wwwroot.'/local/dsubscription/changeuser.php?id='.$id;
-
 $strdsubscription = get_string('dsubscription', 'local_dsubscription');
 $strenable = get_string('enable', 'local_dsubscription');
 $strdisable = get_string('disable', 'local_dsubscription');

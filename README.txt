@@ -24,5 +24,8 @@ http://moodle.org/user/profile.php?id=49568
 
 == See also ==
 
+https://github.com/jleyva/moodle-local_dsubscription
+
+http://moodle.org/plugins/view.php?plugin=local_dsubscription
 
 [[Category: Contributed code]]
