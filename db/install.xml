@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/dsubscription/db" VERSION="20120117" COMMENT="XMLDB file for Moodle local/dsubscription"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="local_dsubscription" COMMENT="List of forums where discuss subscription is enabled" NEXT="local_dsubscription_post">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="forum"/>
+        <FIELD NAME="forum" TYPE="int" LENGTH="11" NOTNULL="false" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="Forum id" PREVIOUS="id" NEXT="enabled"/>
+        <FIELD NAME="enabled" TYPE="int" LENGTH="1" NOTNULL="false" UNSIGNED="false" DEFAULT="0" SEQUENCE="false" PREVIOUS="forum"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="forum"/>
+        <KEY NAME="forum" TYPE="unique" FIELDS="forum" PREVIOUS="primary"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="local_dsubscription_post" COMMENT="Posts yet mailed" PREVIOUS="local_dsubscription" NEXT="local_dsubscription_subs">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="post"/>
+        <FIELD NAME="post" TYPE="int" LENGTH="11" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="id" NEXT="mailed"/>
+        <FIELD NAME="mailed" TYPE="int" LENGTH="1" NOTNULL="false" UNSIGNED="false" DEFAULT="0" SEQUENCE="false" PREVIOUS="post"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="local_dsubscription_subs" COMMENT="Subscriptions" PREVIOUS="local_dsubscription_post" NEXT="local_dsubscription_q">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="userid"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="11" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="id" NEXT="discuss"/>
+        <FIELD NAME="discuss" TYPE="int" LENGTH="11" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="userid" NEXT="enabled"/>
+        <FIELD NAME="enabled" TYPE="int" LENGTH="1" NOTNULL="false" UNSIGNED="false" SEQUENCE="false" PREVIOUS="discuss"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="local_dsubscription_q" COMMENT="For keeping track of posts that will be mailed in digest form" PREVIOUS="local_dsubscription_subs">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="userid"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="id" NEXT="discussionid"/>
+        <FIELD NAME="discussionid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="userid" NEXT="postid"/>
+        <FIELD NAME="postid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="discussionid" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="The modified time of the original post" PREVIOUS="postid"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="discussionid"/>
+        <KEY NAME="discussionid" TYPE="foreign" FIELDS="discussionid" REFTABLE="forum_discussions" REFFIELDS="id" PREVIOUS="primary" NEXT="postid"/>
+        <KEY NAME="postid" TYPE="foreign" FIELDS="postid" REFTABLE="forum_posts" REFFIELDS="id" PREVIOUS="discussionid"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="user" UNIQUE="false" FIELDS="userid"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>
